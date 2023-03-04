@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
+import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 
 import 'constant/words.dart';
 
@@ -76,28 +78,31 @@ class _MyHomePageState extends State<MyHomePage> {
   // return OutlinedButton(onPressed: _shuffleWordGrid, child: Text("SHUFFLE"));
   // }
 
-  GridView makeWordGrid() {
-    int axisCount = 1;
-    return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: axisCount),
-        itemCount: _wordGrid[0].length * _wordGrid.length,
-        itemBuilder: _buildGridItems);
-  }
+  ReorderableBuilder makeWordGrid(int idx) {
+    final generatedChildren = List.generate(
+      _wordGrid.length,
+      (index) => Container(
+        key: Key(_wordGrid[idx].elementAt(index)),
+        color: Colors.lightBlue,
+        child: Text(
+          _wordGrid[idx].elementAt(index),
+        ),
+      ),
+    );
 
-  Widget _buildGridItems(BuildContext ctx, int index) {
-    if (_wordGrid.isEmpty) {
-      return const GridTile(
-        child: Center(child: Text('')),
-      );
-    }
-    int itemCount = _wordGrid.length;
-    int x = 0, y = 0;
-    x = (index / itemCount).floor();
-    y = (index % itemCount);
-
-    return GridTile(
-      child: Center(child: Text(_wordGrid[x][y])),
+    return ReorderableBuilder(
+      scrollController: ScrollController(),
+      onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {},
+      builder: (children) {
+        return GridView(
+          key: GlobalKey(),
+          controller: ScrollController(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1),
+          children: children,
+        );
+      },
+      children: generatedChildren,
     );
   }
 
@@ -115,19 +120,19 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           SizedBox(
             width: 100,
-            child: makeWordGrid(),
+            child: makeWordGrid(0),
           ),
           SizedBox(
             width: 100,
-            child: makeWordGrid(),
+            child: makeWordGrid(1),
           ),
           SizedBox(
             width: 100,
-            child: makeWordGrid(),
+            child: makeWordGrid(2),
           ),
           SizedBox(
             width: 100,
-            child: makeWordGrid(),
+            child: makeWordGrid(3),
           ),
         ],
       ),
