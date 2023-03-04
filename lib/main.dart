@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
 import 'constant/words.dart';
 
 void main() {
@@ -40,11 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _setWordGrid() {
     setState(() {
-      int idx = 0;
-      while (true) {
-        if (idx == 4) {
-          break;
-        }
+      for (int idx = 0; idx < 4; ++idx) {
         int randIdx = Random().nextInt(words.length);
         if (!_roundWords.contains(words[randIdx])) {
           var newWord = words[randIdx].toUpperCase();
@@ -81,9 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // }
 
   GridView makeWordGrid() {
-    _setWordGrid();
-    _shuffleWordGrid();
-    int axisCount = _wordGrid.length;
+    int axisCount = 1;
     return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: axisCount),
@@ -94,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildGridItems(BuildContext ctx, int index) {
     if (_wordGrid.isEmpty) {
       return const GridTile(
-
         child: Center(child: Text('')),
       );
     }
@@ -114,13 +107,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _setWordGrid();
+    _shuffleWordGrid();
+
     return Scaffold(
-      body: Column(
+      body: Row(
         children: [
           SizedBox(
-            height: 400,
+            width: 100,
             child: makeWordGrid(),
-          )
+          ),
+          SizedBox(
+            width: 100,
+            child: makeWordGrid(),
+          ),
+          SizedBox(
+            width: 100,
+            child: makeWordGrid(),
+          ),
+          SizedBox(
+            width: 100,
+            child: makeWordGrid(),
+          ),
         ],
       ),
     );
