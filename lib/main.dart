@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
           for (var i = 0; i < 4; i++) {
             _wordGrid[idx][i] = newWord.substring(i, i + 1);
           }
-          idx++;
         }
       }
     });
@@ -82,10 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
     final generatedChildren = List.generate(
       _wordGrid.length,
       (index) => Container(
-        key: Key(_wordGrid[idx].elementAt(index)),
+        key: Key(Random().nextInt(100000000).toString()),
         color: Colors.lightBlue,
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(10),
         child: Text(
-          _wordGrid[idx].elementAt(index),
+          _wordGrid[index].elementAt(idx),
         ),
       ),
     );
